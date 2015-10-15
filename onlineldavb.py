@@ -31,26 +31,8 @@ def dirichlet_expectation(alpha):
         return(psi(alpha) - psi(n.sum(alpha)))
     return(psi(alpha) - psi(n.sum(alpha, 1))[:, n.newaxis])
 
-def parse_doc_list(sessions, vocab):
-    """
-    Arguments: 
-    sessions:  List of D sessions.
-    vocab: Dictionary mapping from eventIds to integer ids.
-
-    Returns a pair of lists of lists. 
-
-    The first, wordids, says what vocabulary tokens are present in
-    each document. wordids[i][j] gives the jth unique token present in
-    document i. (Don't count on these tokens being in any particular
-    order.)
-
-    The second, wordcts, says how many times each vocabulary token is
-    present. wordcts[i][j] is the number of times that the token given
-    by wordids[i][j] appears in document i.
-    """
-    if (type(sessions).__name__ == 'str'):
-        sessions = [sessions]
-
+def parse_sessions_list(sessions, vocab):
+    
     D = len(sessions)
     
     wordids = list()
@@ -133,7 +115,7 @@ class OnlineLDA:
             temp.append(sessions)
             sessions = temp
 
-        (wordids, wordcts) = parse_doc_list(sessions, self._vocab)
+        (wordids, wordcts) = parse_sessions_list(sessions, self._vocab)
         batchD = len(sessions)
 
         # Initialize the variational distribution q(theta|gamma) for
@@ -243,7 +225,7 @@ class OnlineLDA:
             temp.append(sessions)
             sessions = temp
 
-        (wordids, wordcts) = parse_doc_list(sessions, self._vocab)
+        (wordids, wordcts) = parse_sessions_list(sessions, self._vocab)
         batchD = len(sessions)
 
         score = 0
