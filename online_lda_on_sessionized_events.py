@@ -3,7 +3,7 @@ import cPickle, string, numpy, getopt, sys, random, time, re, pprint
 import onlineldavb
 import mongo_client
 
-project_id = "string"
+project_id = "id"
 
 # The number of documents to analyze each k
 batchsize = 500
@@ -18,11 +18,11 @@ model = onlineldavb.OnlineLDA(vocab, K, D)
 
 for k, (n_skip,n_limit) in enumerate(build_batches(n, batch_size)):
 
-    sessions = get_sessions_batch(project_id, n_skip, n_limit)
+    sessions = mongo_client.get_sessions_batch(project_id, n_skip, n_limit)
         
     (gamma, bound) = model.update_lambda(sessions)
 
-    (event_tokens, event_counts) = onlineldavb.parse_doc_list(sessions, model._vocab)
+    (event_tokens, event_counts) = onlineldavb.parse_sessions_list(sessions, model._vocab)
     perwordbound = bound * len(sessions) / (D * sum(map(sum, event_counts)))
 
     print '%d:  rho_t = %f,  held-out perplexity estimate = %f' % \

@@ -3,9 +3,9 @@ import pymongo
 from bson import ObjectId
 from pymongo import MongoClient
 
-mongo_ip = '10.0.3.23'
+mongo_ip = '127.0.0.1'
 mongo_port = 27017
-mongo_db_name = "test_db"
+mongo_db_name = "test"
 event_collection_name = "event_types"
 session_collection_name = "sessions"
 
